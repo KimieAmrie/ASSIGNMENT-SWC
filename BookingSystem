@@ -1,0 +1,85 @@
+import java.util.Scanner;
+
+public class BookingSystem {
+    private Appointment[] appointments;
+
+    public BookingSystem() {
+        appointments = new Appointment[20];
+    }
+
+    public void addAppointment(int index, Appointment appointment) {
+        if (index >= 0 && index < 20) {
+            appointments[index] = appointment;
+        } else {
+            System.out.println("Invalid index. Appointment could not be added.");
+        }
+    }
+
+    public void cancelAppointment(int index) {
+        if (index >= 0 && index < 20) {
+            appointments[index] = null;
+            System.out.println("Appointment at index " + index + " has been cancelled.");
+        } else {
+            System.out.println("Invalid index. Appointment could not be cancelled.");
+        }
+    }
+
+    public void displayAppointments() {
+        System.out.println("Appointment Schedule:");
+        for (int i = 0; i < 20; i++) {
+            if (appointments[i] != null) {
+                System.out.println("Index " + i + ": " + appointments[i].toString());
+            } else {
+                System.out.println("Index " + i + ": Empty");
+            }
+        }
+    }
+
+    public void displayAppointmentsByDate(String date) {
+        System.out.println("Appointments scheduled for " + date + ":");
+        boolean found = false;
+        for (Appointment appointment : appointments) {
+            if (appointment != null && appointment.getApptDate().equals(date)) {
+                System.out.println(appointment.toString());
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("No appointments scheduled for " + date);
+        }
+    }
+
+    public static void main(String[] args) {
+        BookingSystem bookingSystem = new BookingSystem();
+        Scanner scanner = new Scanner(System.in);
+
+        for (int i = 0; i < 20; i++) {
+            System.out.println("Enter details for Appointment " + (i + 1) + ":");
+
+            System.out.print("Patient Name: ");
+            String patientName = scanner.nextLine();
+
+            System.out.print("Appointment Date (YYYY-MM-DD): ");
+            String apptDate = scanner.nextLine();
+
+            System.out.print("Appointment Time: ");
+            String apptTime = scanner.nextLine();
+
+            System.out.print("Dentist Name: ");
+            String dentistName = scanner.nextLine();
+
+            Appointment appointment = new Appointment(patientName, apptDate, apptTime, dentistName);
+            bookingSystem.addAppointment(i, appointment);
+        }
+
+        // Display all appointment details
+        bookingSystem.displayAppointments();
+
+        // Prompt the user to cancel an appointment
+        System.out.print("Enter index of appointment to cancel: ");
+        int cancelIndex = scanner.nextInt();
+        bookingSystem.cancelAppointment(cancelIndex);
+
+        scanner.close();
+    }
+}
